@@ -1,8 +1,13 @@
 const list = document.querySelector('#list')
 const filter = document.querySelector('#filter')
+let USERS = []
 
 filter.addEventListener('input', event => {
-	console.log('input', event.target.value)
+	const value = event.target.value.toLowerCase()
+	const filteredUsers = USERS.filter(user => {
+		return user.name.toLowerCase().includes(value) // includes - checks for matches string
+	})
+	renderUsers(filteredUsers)
 })
 
 async function getFromServer() {
@@ -11,6 +16,7 @@ async function getFromServer() {
 		const resp = await fetch('https://jsonplaceholder.typicode.com/users') // server return response
 		const data = await resp.json() // method parse response to json
 		setTimeout(() => {
+			USERS = data
 			renderUsers(data)
 		}, 2000)
 	} catch (err) {
