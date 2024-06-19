@@ -1,13 +1,17 @@
 const list = document.querySelector('#list')
 
-async function start() {
+async function getFromServer() {
+	list.innerHTML = 'Loading ...'
 	try {
-		const resp = await fetch('https://jsonplaceholder.typicode.com/users')
-		const data = await resp.json()
-		console.log(resp)
-		console.log(data)
-		renderUsers(data)
-	} catch (err) {}
+		const resp = await fetch('https://jsonplaceholder.typicode.com/users') // server return response
+		const data = await resp.json() // method parse response to json
+		setTimeout(() => {
+			renderUsers(data)
+		}, 2000)
+	} catch (err) {
+		list.style.color = 'red'
+		list.innerHTML = err.message
+	}
 }
 
 function renderUsers(users = []) {
@@ -15,10 +19,10 @@ function renderUsers(users = []) {
 	list.innerHTML = html
 }
 
-function toHTML(user) {
+function toHTML(oneUser) {
 	return `
-	<li class="list-group-item">${user.name}</li>
+	<li class="list-group-item">${oneUser.name}</li>
 	`
 }
 
-start()
+getFromServer()
